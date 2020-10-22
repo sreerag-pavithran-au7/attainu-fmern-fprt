@@ -1,18 +1,18 @@
+import axios from '../axios-users';
 import jwt_decode from 'jwt-decode';
 
-import {CLEAR_CURRENT_PROFILE,GET_ERRORS,SET_CURRENT_USER} from '../types';
+import {
+  CLEAR_CURRENT_PROFILE,
+  GET_ERRORS,
+  SET_CURRENT_USER,
+} from '../types';
 import setAuthToken from '../utils/validation/setAuthToken';
 
 export const registerUser = (userData, history) => {
   return dispatch => {
-    fetch('/register',{
-        method: "POST",
-        headers: {
-          Accept: 'application/json',
-          "Content-Type": "application/json"
-      },
-      body: JSON.stringify(userData),
-    }).then(res => {
+    axios
+      .post('/users/register', userData)
+      .then(res => {
         history.push('/');
       })
       .catch(err => {
@@ -24,13 +24,9 @@ export const registerUser = (userData, history) => {
 
 export const loginUser = userData => {
   return dispatch => {
-    fetch('/login',{
-      headers: {
-        Accept: 'application/json',
-        "Content-Type": "application/json"
-    },
-    body: JSON.stringify(userData),
-    }).then(res => {
+    axios
+      .post('/users/login', userData)
+      .then(res => {
         const { token } = res.data;
         localStorage.setItem('jwtToken', token);
         setAuthToken(token);

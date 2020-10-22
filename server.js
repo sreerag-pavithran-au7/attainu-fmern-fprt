@@ -1,24 +1,25 @@
-const express = require('express');
-const cors = require('cors');
-const morgan =require('morgan');
-const bodyParser = require('body-parser');
-require('./config/db');
-const app = express();
-const PORT = process.env.PORT||4000;
+const mongoose = require("mongoose");
+const http = require("http");
+const app = require("./app");
 
-app.use(morgan('dev'));
-app.use(bodyParser.json());
-app.use(cors());
-app.use(express.json());
+require("dotenv").config();
 
+const port = process.env.process || 4000;
+const server = http.createServer(app);
 
-const userRouter = require('./routes/userRoutes');
-const taskRouter = require('./routes/taskRoutes');
+// Connecting to the DB
+mongoose.promise = global.Promise;
 
-app.listen(PORT, () => {
-    console.log(`Server is running on port: ${PORT}`);
+mongoose
+  .connect("mongodb://localhost/todo", {
+    useNewUrlParser: true,
+    useCreateIndex: true,
+  })
+  .then(() => {
+    console.log("Database connected");
+  })
+  .catch(err => console.log(err));
+
+server.listen(port, () => {
+  console.log(`listening on ${port}`);
 });
-
-app.use('/',userRouter);
-app.use('/',taskRouter)
-

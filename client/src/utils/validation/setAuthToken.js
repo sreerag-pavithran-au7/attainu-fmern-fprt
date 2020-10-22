@@ -1,10 +1,13 @@
+import axios from "../../axios-users";
+
+
 const setAuthToken = token=>{
-    console.log('token -- ', token)
     if(token){
-        fetch.defaults.headers.common['Authorization']='Bearer '+token;
+        // apply for every request
+        axios.defaults.headers.common['Authorization']='Bearer '+token;
     }
     else {
-        delete fetch.defaults.headers.common['Authorization'];
+        delete axios.defaults.headers.common['Authorization'];
     }
 }
 

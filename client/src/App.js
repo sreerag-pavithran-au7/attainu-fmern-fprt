@@ -1,31 +1,36 @@
-import React from 'react';
-import {Provider} from 'react-redux'
-import {BrowserRouter,Route,Switch} from 'react-router-dom'
-import store from "./store"
-import Header from './components/Header/Header'
-import Login from './components/User/Login'
-import Register from './components/User/Register' 
+import React, { Component } from 'react';
 import './App.css';
-import './styles/main.scss'
+import './styles/main.scss';
+import { Route, Switch, withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
+import Register from './containers/auth/Register';
+import Login from './containers/auth/Login';
+import Boards from './components/Boards/Boards';
+import Board from './containers/Board/Board';
 
-function App() {
-  return (
-    <Provider store={store}>
-      <BrowserRouter>
-        <div className={'App'}>
-          <Route component={Header} />
-          <Switch>
-            <Route exact path={'/'} component={Login} />
-            <Route exact path={'/register'} component={Register} />
+import Header from './containers/Header/Header';
+import PrivateRoute from './components/common/PrivateRoute';
 
-            {/* <PrivateRoute exact path={'/boards/:boardId'} component={Board} />
-            <PrivateRoute path={'/boards'} component={Boards} /> */} */}
-          </Switch>
-        </div>
-      </BrowserRouter>
-    </Provider>
-    
-  );
+class App extends Component {
+  render() {
+    return (
+      <div className={'App'}>
+        <Route component={Header} />
+        <Switch>
+          <Route exact path={'/'} component={Login} />
+          <Route exact path={'/register'} component={Register} />
+
+          <PrivateRoute exact path={'/boards/:boardId'} component={Board} />
+          <PrivateRoute path={'/boards'} component={Boards} />
+        </Switch>
+      </div>
+    );
+  }
 }
 
-export default App;
+const mapStateToProps = state => {
+  return {
+    auth: state.auth,
+  };
+};
+export default withRouter(connect(mapStateToProps)(App));

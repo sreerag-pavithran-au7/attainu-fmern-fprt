@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const User = require('../model/userModel');
+const User = require('../models/User');
 
 require('dotenv').config();
 
@@ -16,7 +16,7 @@ const checkAuth = (req, res, next) => {
           return res.status(401).json({ message: 'Auth Failed' });
         }
         req.userData = user;
-        // console.log('auth success');
+        console.log('auth success');
         return next();
       })
       .catch(error => res.status(500).json(error));
